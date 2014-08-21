@@ -1,0 +1,40 @@
+{
+	"name": "Crop and Screen Capture",
+	"version": "0.1.0",
+	"manifest_version": 2,
+	"description": "Select area of screen and take screenshot",
+
+	"icons": {
+		"16": "img/icon16.png",
+		"48": "img/icon48.png",
+		"128": "img/icon128.png"
+	},
+	
+	"background": {
+		"scripts": [
+			"js/background.js"
+		],
+		"persistent": false
+	},
+	
+	"content_scripts": [
+		{
+			"matches": ["http://*/*", "https://*/*"],
+			"js": ["js/content.js"],
+	        "run_at": "document_end",
+	        "all_frames": true
+		}
+	],
+	
+	"browser_action": {
+		"default_title": "Crop and Screen Capture",
+		"default_icon": "img/icon.png"
+	},
+	
+	"permissions": [
+		"tabs",
+		"activeTab",
+		"http://*/*",
+		"https://*/*"
+	]
+}
