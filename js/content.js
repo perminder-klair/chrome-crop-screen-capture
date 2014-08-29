@@ -37,7 +37,7 @@ function sendMessage(msg) {
 // end messages
 //
  
-var ghostElement, startPos, gCoords;
+var ghostElement, startPos, gCoords, startY;
  
 function keyDown(e) {
 	var keyCode = e.keyCode;
@@ -57,6 +57,7 @@ function mouseDown(e) {
 	e.preventDefault();
  
 	startPos = {x: e.pageX, y: e.pageY};
+    startY = e.y;
 	
 	ghostElement = document.createElement('div');
 	ghostElement.style.background = 'blue';
@@ -103,7 +104,7 @@ function mouseUp(e) {
 			w: diff.x,
 			h: diff.y,
 			x: startPos.x,
-			y: startPos.y
+			y: startY
 		};
 		gCoords = coords;
 		endScreenshot(coords);
