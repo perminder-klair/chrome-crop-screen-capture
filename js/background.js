@@ -6,6 +6,8 @@ var Constants = {
 };
 
 var contentURL = '';
+var clientid = '4409588f10776f7';
+var path = 'https://api.imgur.com/3/image';
 
 function cropData(str, coords, callback) {
     var img = new Image();
@@ -92,7 +94,31 @@ function saveFile(dataURI) {
     function onwriteend() {
         // open the file that now contains the blob
         var URL = 'filesystem:chrome-extension://' + chrome.i18n.getMessage('@@extension_id') + '/temporary/' + name;
-        debugBase64(URL);
+        //debugBase64(URL);
+        var fd = new FormData();
+        fd.append('image', blob);
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("POST", path, true);
+
+        //Send the proper header information along with the request
+        xhttp.setRequestHeader('Authorization', 'Client-ID ' + clientid);
+
+        xhttp.onreadystatechange = function () {
+            if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                var response = '';
+                    try {
+                        response = JSON.parse(this.responseText);
+                    } catch (err) {
+                        response = this.responseText;
+                    }
+                    if (response.success === true) {
+                        var get_link = response.data.link.replace(/^http:\/\//i, 'https://');
+                        window.open("https://images.google.com/searchbyimage?image_url=" + get_link);
+                    }
+            }
+        };
+        xhttp.send(fd);
+        xhttp = null;
     }
     /**
      * Display a base64 URL inside an iframe in another window.
