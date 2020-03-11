@@ -1,13 +1,13 @@
 {
-	"name": "Crop and Screen Capture",
-	"version": "0.1.0",
+	"name": "Screencap Search",
+	"version": "0.1.1",
 	"manifest_version": 2,
-	"description": "Select area of screen and take screenshot",
+	"description": "Select area of screen, take a screenshot and perform reverse-image search",
 
 	"icons": {
-		"16": "img/icon16.png",
-		"48": "img/icon48.png",
-		"128": "img/icon128.png"
+		"16": "img/new_icon16.png",
+		"48": "img/new_icon48.png",
+		"128": "img/new_icon128.png"
 	},
 	
 	"background": {
@@ -27,8 +27,8 @@
 	],
 	
 	"browser_action": {
-		"default_title": "Crop and Screen Capture",
-		"default_icon": "img/icon.png"
+		"default_title": "Screencap Search",
+		"default_icon": "img/new_icon.png"
 	},
 	
 	"permissions": [
