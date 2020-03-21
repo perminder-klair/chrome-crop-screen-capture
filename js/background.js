@@ -39,7 +39,15 @@ function capture(coords) {
 chrome.browserAction.onClicked.addListener(function (tab) {
     contentURL = tab.url;
 
-    sendMessage({ type: 'start-screenshots' }, tab);
+    chrome.tabs.executeScript(null, {
+        file: 'js/content.js'
+    }, function () {
+        const port = chrome.tabs.connect(tab.id);
+        port.postMessage({type: 'start-screenshots'});
+        port.onMessage.addListener(gotMessage);
+    })
+
+    // sendMessage({ type: 'start-screenshots' }, tab);
 });
 
 chrome.extension.onMessage.addListener(gotMessage);
@@ -53,6 +61,7 @@ function gotMessage(request, sender, sendResponse) {
 
 function sendMessage(msg, tab) {
     console.log('sending message');
+    console.log(msg)
 
     chrome.tabs.sendMessage(tab.id, msg, function (response) { });
 };

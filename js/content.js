@@ -1,26 +1,32 @@
 // 
 // messages
 //
-chrome.runtime.onMessage.addListener(gotMessage);
+
+chrome.runtime.onConnect.addListener(function(port) {
+    port.onMessage.addListener(gotMessage);
+})
+
+//chrome.runtime.onMessage.addListener(gotMessage);
  
 function gotMessage(request, sender, sendResponse) {
-	console.log('got message');
-	if (request.type == "start-screenshots")
-		startScreenshot();
-	
-	sendResponse({});
+    console.log('got message');
+    if (request.type == "start-screenshots")
+        startScreenshot();
+ 	
+ 	sendResponse({});
 }
  
 function startScreenshot() { console.log('start screenshot');
 	//change cursor
 	document.body.style.cursor = 'crosshair';
 
-	document.addEventListener('mousedown', mouseDown, false);
-	document.addEventListener('keydown', keyDown, false);
+	document.addEventListener('mousedown', mouseDown, {capture: true});
+	document.addEventListener('keydown', keyDown, {capture: true});
+    document.addEventListener('click', clickSuppressor, {capture: true});
 }
  
 function endScreenshot(coords) {
-	document.removeEventListener('mousedown', mouseDown, false);
+	document.removeEventListener('mousedown', mouseDown, {capture: true});
 	
 	sendMessage({type: 'coords', coords: coords});
 }
@@ -52,9 +58,15 @@ function keyDown(e) {
 		return false;
 	}
 }
+
+function clickSuppressor(e) {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+}
  
 function mouseDown(e) {
 	e.preventDefault();
+    e.stopPropagation();
  
 	startPos = {x: e.pageX, y: e.pageY};
     startY = e.y;
@@ -70,14 +82,15 @@ function mouseDown(e) {
 	ghostElement.style.zIndex = "1000000";
 	document.body.appendChild(ghostElement);
 	
-	document.addEventListener('mousemove', mouseMove, false);
-	document.addEventListener('mouseup', mouseUp, false);
+	document.addEventListener('mousemove', mouseMove, {capture: true});
+	document.addEventListener('mouseup', mouseUp, {capture: true});
 	
 	return false;
 }
  
 function mouseMove(e) {
 	e.preventDefault();
+    e.stopPropagation();
  
 	var nowPos = {x: e.pageX, y: e.pageY};
 	var diff = {x: nowPos.x - startPos.x, y: nowPos.y - startPos.y};
@@ -90,12 +103,13 @@ function mouseMove(e) {
  
 function mouseUp(e) {
 	e.preventDefault();
+    e.stopPropagation();
 	
 	var nowPos = {x: e.pageX, y: e.pageY};
 	var diff = {x: nowPos.x - startPos.x, y: nowPos.y - startPos.y};
  
-	document.removeEventListener('mousemove', mouseMove, false);
-	document.removeEventListener('mouseup', mouseUp, false);
+	document.removeEventListener('mousemove', mouseMove, {capture: true});
+	document.removeEventListener('mouseup', mouseUp, {capture: true});
 	
 	ghostElement.parentNode.removeChild(ghostElement);
 	
