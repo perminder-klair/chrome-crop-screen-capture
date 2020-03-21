@@ -27,6 +27,7 @@ function startScreenshot() { console.log('start screenshot');
  
 function endScreenshot(coords) {
 	document.removeEventListener('mousedown', mouseDown, {capture: true});
+    document.removeEventListener('click', clickSuppressor, {capture: true})
 	
 	sendMessage({type: 'coords', coords: coords});
 }
