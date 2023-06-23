@@ -1,7 +1,6 @@
 Chrome Extension for Crop and Screen Capture
-==========================
 
-A simple Google Chrome extension that takes tgat select area of screen and take screenshot
+Chrome extension that takes that selects area of screen and take screenshot
 
 Feel free to fork it and modify.
 
